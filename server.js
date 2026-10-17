@@ -1,4 +1,7 @@
 import net from "node:net";
+import fs from "node:fs";
+
+
 
 // Can be create like this
 // const server = net.createServer();
@@ -8,7 +11,7 @@ import net from "node:net";
 // })
 // server.listen(3000, "127.0.0.1", () => {
 //   console.log("listening on", server.address());
-// });
+
 
 const server = net.createServer((socket) => {
   // Crate TCP connection
@@ -17,7 +20,10 @@ const server = net.createServer((socket) => {
 
   socket.on("data", (chunk) => {
     if (chunk.length === 0) return;
+    chunk = chunk.toString();
     if (chunk === "file:number.txt") {
+      socket.write("file:number.txt");
+
       const file = fs.createReadStream("./number.txt");
       file.pipe(socket);
       return;
